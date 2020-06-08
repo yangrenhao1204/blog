@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(title)">
+    <title th:replace="${title}">Learn &amp; Record</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link rel="stylesheet" th:href="@{/css/pace.css}">
+    <link rel="stylesheet" th:href="@{/css/typo.css}">
+    <link rel="stylesheet" th:href="@{/lib/prism/prism.css}">
+    <link rel="stylesheet" th:href="@{/lib/tocbot/tocbot.css}">
+    <link rel="stylesheet" th:href="@{/css/iconfont.css}">
+    <link rel="stylesheet" th:href="@{/css/custom.css}">
+</head>
+
+<body>
+<div th:fragment="menu(name)" class="container">
+    <header id="site-header">
+        <div class="row">
+            <div class="col-md-4 col-sm-5 col-xs-8">
+                <div class="logo">
+                    <h1><a href="index.html" th:href="@{/}">Learn &amp; Record</a></h1>
+                </div>
+            </div><!-- col-md-4 -->
+            <div class="col-md-8 col-sm-7 col-xs-4">
+                <nav class="main-nav" role="navigation">
+                    <div class="navbar-header">
+                        <button type="button" id="trigger-overlay" class="navbar-toggle">
+                            <span class="ion-navicon"></span>
+                        </button>
+                    </div>
+
+                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                        <ul class="nav navbar-nav navbar-right">
+                            <li class="cl-effect-11">
+                                <a th:classappend="${name=='index'}?'active'"
+                                   th:href="@{/}" href="index.html" data-hover="首页">首页</a>
+                            </li>
+                            <li class="cl-effect-11">
+                                <a th:classappend="${name=='types'}?'active'"
+                                   th:href="@{/types/-1}" href="types.html" data-hover="类别">类别</a>
+                            </li>
+                            <li class="cl-effect-11">
+                                <a th:classappend="${name=='tags'}?'active'"
+                                   th:href="@{/tags/-1}" href="tags.html" data-hover="标签">标签</a>
+                            </li>
+                            <li class="cl-effect-11">
+                                <a th:classappend="${name=='archives'}?'active'"
+                                   th:href="@{/archives}" href="archives.html" data-hover="归档">归档</a>
+                            </li>
+                            <li class="cl-effect-11">
+                                <a th:classappend="${name=='about'}?'active'"
+                                   th:href="@{/about}" href="about.html" data-hover="关于">关于</a>
+                            </li>
+                        </ul>
+                    </div><!-- /.navbar-collapse -->
+                </nav>
+                <div id="header-search-box">
+                    <a id="search-menu" href="#"><span id="search-icon" class="ion-ios-search-strong"></span></a>
+                    <div id="search-form" class="search-form">
+                        <form role="search" method="post" id="searchform" action="#" th:action="@{/search}" target="_blank">
+                            <input type="search" placeholder="搜索" name="query" th:value="${query}!=null?${query}:''" required>
+                            <button type="submit"><span class="ion-ios-search-strong"></span></button>
+                        </form>
+                    </div>
+                </div>
+            </div><!-- col-md-8 -->
+        </div>
+    </header>
+</div>
+
+
+<footer th:fragment="footer" id="site-footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <p class="copyright">
+                    &copy; 2020 yangrenhao.top &nbsp
+                    <a href="http://beian.miit.gov.cn/" target="_blank">粤ICP备20010814号</a> &nbsp
+                    <a target="_blank"
+                       href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=44158102000044"
+                       style="display:inline-block;text-decoration:none;height:20px;line-height:20px;">
+                        <img th:src="@{/images/beian.png}" style="float:left;"/>
+                        粤公网安备 44158102000044号
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Mobile Menu -->
+<div th:fragment="mobileMenu" class="overlay overlay-hugeinc">
+    <button type="button" class="overlay-close"><span class="ion-ios-close-empty"></span></button>
+    <nav>
+        <ul>
+            <li><a href="index.html" th:href="@{/}">首页</a></li>
+            <li><a href="types.html" th:href="@{/types/-1}">分类</a></li>
+            <li><a href="tags.html" th:href="@{/tags/-1}">标签</a></li>
+            <li><a href="archives.html" th:href="@{/archives/-1}">归档</a></li>
+            <li><a href="about.html" th:href="@{/about}">关于</a></li>
+        </ul>
+    </nav>
+</div>
+
+<th:block th:fragment="script">
+    <script th:src="@{/js/jquery-2.1.3.min.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script th:src="@{/js/pace.min.js}"></script>
+    <script th:src="@{/js/modernizr.custom.js}"></script>
+    <script th:src="@{/js/script.js}"></script>
+</th:block>
+
+</body>
+</html>

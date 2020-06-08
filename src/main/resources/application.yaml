@@ -1,0 +1,27 @@
+spring:
+  thymeleaf:
+    mode: HTML
+  messages:
+    basename: i18n/messages
+  profiles:
+    active: dev
+
+comment.avatar: /images/intj.png
+
+
+# 语法
+# test:
+#  strTest: str_${random.uuid}@1.c
+#  num: ${random.int}
+#  flag: true
+#  time: 2020/05/05
+#  maps: {k1: v1, k2: v2}
+#  lists: [item1, item2, item3]
+#  article:
+#    title: ${test.thisTitle:没有}_标题
+#    content: test_content
+#  thisTitle: 测试
+
+#server:
+#  servlet:
+#    context-path: /yangrenhao

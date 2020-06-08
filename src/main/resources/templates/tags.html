@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="_blogFragments::head(~{::title})">
+	<title>标签</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="../static/css/bootstrap.min.css">
+	<link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+	<link rel="stylesheet" href="../static/css/pace.css">
+	<link rel="stylesheet" href="../static/css/custom.css">
+</head>
+
+<body>
+<div class="container" th:replace="_blogFragments::menu('tags')">
+	<header id="site-header">
+		<div class="row">
+			<div class="col-md-4 col-sm-5 col-xs-8">
+				<div class="logo">
+					<h1><a href="index.html">Learn &amp; Record</a></h1>
+				</div>
+			</div><!-- col-md-4 -->
+			<div class="col-md-8 col-sm-7 col-xs-4">
+				<nav class="main-nav" role="navigation">
+					<div class="navbar-header">
+						<button type="button" id="trigger-overlay" class="navbar-toggle">
+							<span class="ion-navicon"></span>
+						</button>
+					</div>
+
+					<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+						<ul class="nav navbar-nav navbar-right">
+							<li class="cl-effect-11"><a href="index.html" data-hover="首页">首页</a></li>
+							<li class="cl-effect-11"><a href="types.html" data-hover="分类">分类</a></li>
+							<li class="cl-effect-11"><a href="tags.html" data-hover="标签">标签</a></li>
+							<li class="cl-effect-11"><a href="archives.html" data-hover="归档">归档</a></li>
+							<li class="cl-effect-11"><a href="about.html" data-hover="关于">关于</a></li>
+						</ul>
+					</div><!-- /.navbar-collapse -->
+				</nav>
+				<div id="header-search-box">
+					<a id="search-menu" href="#"><span id="search-icon" class="ion-ios-search-strong"></span></a>
+					<div id="search-form" class="search-form">
+						<form role="search" method="get" id="searchform" action="#">
+							<input type="search" placeholder="搜索" required>
+							<button type="submit"><span class="ion-ios-search-strong"></span></button>
+						</form>
+					</div>
+				</div>
+			</div><!-- col-md-8 -->
+		</div>
+	</header>
+</div>
+
+<div class="content-body">
+	<div class="container">
+		<div class="row" col-md-12>
+
+			<div class="widget widget-exhibition">
+				<h3 class="widget-title">
+					标签<small>共<span th:text="${#arrays.length(tags)}">10</span>个</small>
+				</h3>
+				<ul>
+					<li >
+						<a th:classappend="${activeId}==-1?'selected':''" href="#" th:href="@{/tags/-1}">全部</a>
+					</li>
+					<li th:each="tag:${tags}">
+						<a href="#" th:href="@{/tags/{id}(id=${tag.id})}" th:classappend="${activeId==tag.id}?'selected':''">
+							<span th:text="${tag.name}">Python 教程</span>
+							<span class="post-count" th:text="${#arrays.length(tag.blogs)}">(11)</span>
+						</a>
+					</li>
+				</ul>
+			</div>
+
+			<article class="post" th:each="blog:${page.content}">
+				<header class="entry-header">
+					<h1 class="entry-title">
+						<a href="blog.html" th:href="@{/blogs/{id}(id=${blog.id})}" target="_blank" th:text="${blog.title}">Django 博客开发入门教程：前言</a>
+					</h1>
+					<div class="entry-meta">
+						<span class="post-category"><a href="#" th:text="${blog.type.name}" th:href="@{'/types/'+${blog.type.id}}">Django 博客教程</a></span>
+						<span class="post-date" th:text="${#dates.format(blog.updateTime, 'yyyy-mm-dd')}">2017年5月11日</span>
+						<span class="post-author" th:text="${blog.user.nickname}">杨任壕</span>
+						<span class="comments-link"><span th:text="${#arrays.length(blog.comments)}">4</span> 评论</span>
+						<span class="views-count"><span th:text="${blog.views}">588</span> 阅读</span>
+						<span th:text="${blog.flag}">原创</span>
+					</div>
+				</header>
+				<div class="entry-content clearfix">
+					<p th:text="|${blog.description}......|">免费、中文、零基础，完整的项目，基于最新版 Django 1.10 和 Python 3.5。带你从零开始一步步开发属于自己的博客网站，帮助你以最快的速度掌握 Django
+						开发的技巧...</p>
+					<div class="widget-tag-cloud border">
+						<ul>
+							<li th:each="t:${blog.tags}">
+								<a th:classappend="${activeId==t.id}?'selected':''" href="#" th:href="@{/tags/{id}(id=${t.id})}" th:text="${t.name}">flask</a>
+							</li>
+						</ul>
+					</div>
+					<div class="read-more cl-effect-14">
+						<a href="blog.html" th:href="@{/blogs/{id}(id=${blog.id})}" class="more-link">继续阅读 <span class="meta-nav">→</span></a>
+					</div>
+				</div>
+			</article>
+
+			<div style="text-align: center;">
+				<div class="pagination">
+					<ul>
+						<li>
+							<a href="" th:href="@{'/tags/'+${activeId}(pageNumber=1)}">首页</a>
+						</li>
+						<li>
+							<a th:if="${page.hasPrevious()}" href="#"
+							   th:href="@{'/tags/'+${activeId}(pageNumber=${page.number})}">&laquo;</a>
+							<span th:unless="${page.hasPrevious()}">&laquo;</span>
+						</li>
+						<li th:if="${page.number}-1 > 0">
+							<a th:text="${page.number}-1" href="#"
+							   th:href="@{'/tags/'+${activeId}(pageNumber=${page.number}-1)}">1</a>
+						</li>
+						<li th:if="${page.hasPrevious()}">
+							<a th:text="${page.number}" href="#"
+							   th:href="@{'/tags/'+${activeId}(pageNumber=${page.number})}">2</a>
+						</li>
+						<li class="current">
+							<a th:text="${page.number}+1" href="#"
+							   th:href="@{'/tags/'+${activeId}(pageNumber=${page.number}+1)}">3</a>
+						</li>
+						<li th:if="${page.hasNext()}">
+							<a th:text="${page.number}+2" href="#"
+							   th:href="@{'/tags/'+${activeId}(pageNumber=${page.number}+2)}">4</a>
+						</li>
+						<li th:if="${page.number}+3 <= ${page.totalPages}">
+							<a th:text="${page.number}+3" href="#"
+							   th:href="@{'/tags/'+${activeId}(pageNumber=${page.number}+3)}">5</a>
+						</li>
+						<li>
+							<a th:if="${page.hasNext()}" href="#"
+							   th:href="@{'/tags/'+${activeId}(pageNumber=${page.number}+2)}">&raquo;</a>
+							<span th:unless="${page.hasNext()}">&raquo;</span>
+						</li>
+						<li>
+							<a href="" th:href="@{'/tags/'+${activeId}(pageNumber=${page.totalPages})}">尾页</a>
+						</li>
+						<li>共 [[${page.totalPages}]] 页</li>
+					</ul>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</div>
+
+<footer id="site-footer" th:replace="_blogFragments::footer">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<p class="copyright">
+					&copy; 2020 yangrenhao.top &nbsp
+					<a href="http://beian.miit.gov.cn/" target="_blank">粤ICP备20010814号</a> &nbsp
+					<a target="_blank"
+					   href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=44158102000044"
+					   style="display:inline-block;text-decoration:none;height:20px;line-height:20px;">
+						<img src="../static/images/beian.png" style="float:left;"/>
+						粤公网安备 44158102000044号
+					</a>
+				</p>
+			</div>
+		</div>
+	</div>
+</footer>
+
+<!-- Mobile Menu -->
+<div class="overlay overlay-hugeinc" th:replace="_blogFragments::mobileMenu">
+	<button type="button" class="overlay-close"><span class="ion-ios-close-empty"></span></button>
+	<nav>
+		<ul>
+			<li><a href="index.html">首页</a></li>
+			<li><a href="types.html">分类</a></li>
+			<li><a href="tags.html">标签</a></li>
+			<li><a href="archives.html">归档</a></li>
+		</ul>
+	</nav>
+</div>
+
+<!-- js -->
+<!--/*/<th:block th:replace="_blogFragments::script">/*/-->
+<script src="../static/js/jquery-2.1.3.min.js"></script>
+<script src="../static/js/bootstrap.min.js"></script>
+<script src="../static/js/pace.min.js"></script>
+<script src="../static/js/modernizr.custom.js"></script>
+<script src="../static/js/script.js"></script>
+<!--/*/</th:block>/*/-->
+
+</body>
+</html>

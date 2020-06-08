@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="admin/_backstageFragments::head(~{::title})">
+    <title>博客管理-文章</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Bootstrap -->
+    <link href="../../static/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="../../static/css/bootstrap-theme.min.css" rel="stylesheet" media="screen">
+
+    <!-- Bootstrap Admin Theme -->
+    <link href="../../static/css/bootstrap-admin-theme.css" rel="stylesheet" media="screen">
+
+    <link href="../../static/css/bootstrap-select.min.css" rel="stylesheet" media="screen">
+    <link href="../../static/lib/editormd/css/editormd.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="../../static/js/html5shiv.js"></script>
+    <script type="text/javascript" src="../../static/js/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body class="bootstrap-admin-with-small-navbar">
+<nav th:replace="admin/_backstageFragments::navigation" class="navbar navbar-default navbar-inverse navbar-fixed-top "
+     role="navigation">
+    <div class="container">
+        <div class="row">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle">
+                    <span class="sr-only">博客管理后台</span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">博客管理后台</a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">管理员<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">登录</a></li>
+                            <li><a href="#">注册</a></li>
+                            <li><a href="#">个人信息</a></li>
+                            <li class="divider"></li>
+                            <li><a href="#">退出登录</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <!-- left, vertical navbar & content -->
+    <div class="row">
+        <!-- left, vertical navbar -->
+        <div th:replace="admin/_backstageFragments::menu('blogs')" class="col-md-2 bootstrap-admin-col-left">
+            <ul class="nav navbar-collapse collapse bootstrap-admin-navbar-side">
+                <li>
+                    <a href="index.html"><i class="glyphicon glyphicon-chevron-right"></i> 首页</a>
+                </li>
+                <li>
+                    <a href=""><i class="glyphicon glyphicon-chevron-right"></i> 类别</a>
+                </li>
+                <li>
+                    <a href=""><i class="glyphicon glyphicon-chevron-right"></i> 标签</a>
+                </li>
+                <li>
+                    <a href="blogs.html"><i class="glyphicon glyphicon-chevron-right"></i> 文章</a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- content -->
+        <div class="col-md-10">
+            <div class="row">
+                <div class="panel panel-default bootstrap-admin-no-table-panel">
+                    <div class=" bootstrap-admin-panel-content ">
+                        <form class="form-horizontal edit-blog" id="blog-form" th:object="${blog}"
+                              th:action="@{/admin/blogs}" method="post">
+                            <fieldset>
+                                <legend>文章编辑</legend>
+                                <input type="hidden" name="id" th:value="*{id}">
+                                <input type="hidden" id="published" name="published" th:value="*{published}">
+                                <div class="form-group">
+                                    <div class="col-md-2 col-md-offset-1">
+                                        <select class="form-control" name="flag" th:value="*{flag}" required>
+                                            <option th:selected="*{flag} == '原创'" value="原创">原创</option>
+                                            <option th:selected="*{flag} == '转载'" value="转载">转载</option>
+                                            <option th:selected="*{flag} == '翻译'" value="翻译">翻译</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input class="form-control" id="title" name="title" type="text" placeholder="标题"
+                                               th:value="*{title}" required>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <div id="test-editor">
+                                        <textarea id="content" name="content" th:text="*{content}"></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <textarea class="form-control"
+                                                  name="description" th:text="*{description}"
+                                                  placeholder="博客描述..." maxlength="200"
+                                                  style="height: 100px"
+                                                  required></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-4 col-md-offset-1">
+                                        <label class="col-md-3" for="types">类别</label>
+                                        <div class="col-md-9">
+                                            <select class="selectpicker form-control"
+                                                    data-container="body"
+                                                    data-live-search="true"
+                                                    data-hide-disabled="true"
+                                                    title="类型"
+                                                    name="type.id"
+                                                    id="types"
+                                                    required>
+                                                <option th:each="t:${types}"
+                                                        th:selected="*{type}!=null ? *{type.id} == ${t.id}"
+                                                        th:value="${t.id}" th:text="${t.name}">flask
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="col-md-2 " for="tags">标签</label>
+                                        <div class="col-md-10">
+                                            <select multiple class="selectpicker form-control"
+                                                    id="tags"
+                                                    title="标签"
+                                                    name="tagIds"
+                                                    data-hide-disabled="true"
+                                                    data-actions-box="true"
+                                                    data-virtual-scroll="false"
+                                                    data-selected-text-format="count > 3"
+                                                    data-container="body"
+                                                    data-live-search="true">
+                                                <option th:each="tag:${tags}"
+                                                        th:value="${tag.id}"
+                                                        th:text="${tag.name}">java
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="col-md-4 col-md-offset-1">
+                                        <label class="checkbox-inline">
+                                            <input type="checkbox" id="recommend" name="recommend" checked
+                                                   th:checked="*{recommend}">
+                                            <label for="recommend">推荐</label>
+                                        </label>
+                                        <label class="checkbox-inline">
+                                            <input type="checkbox" id="shareStatement" name="shareStatement"
+                                                   th:checked="*{shareStatement}">
+                                            <label for="shareStatement">转载声明</label>
+                                        </label>
+                                        <label class="checkbox-inline">
+                                            <input type="checkbox" id="appreciation" name="appreciation"
+                                                   th:checked="*{appreciation}">
+                                            <label for="appreciation">赞赏</label>
+                                        </label>
+                                        <label class="checkbox-inline">
+                                            <input type="checkbox" id="commentabled" name="commentabled"
+                                                   th:checked="*{commentabled}">
+                                            <label for="commentabled">评论</label>
+                                        </label>
+                                    </div>
+                                    <div class="col-md-3 col-md-offset-3">
+                                        <button class="btn btn-default right" type="button"
+                                                onclick="window.history.go(-1)">返回
+                                        </button>
+                                        <button class="btn btn-warning right" id="save-btn" type="button">保存</button>
+                                        <button class="btn btn-primary right" id="publish-btn" type="button">发布</button>
+                                    </div>
+                                </div>
+                                <input style="display: none;" type="submit" id="sub" value="submit"/>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" th:replace="admin/_backstageFragments::footer">
+        <hr>
+        <footer role="contentinfo">
+            <p>
+                &copy; 2020 yangrenhao.top &nbsp
+                <a href="http://beian.miit.gov.cn/" target="_blank">粤ICP备20010814号</a> &nbsp
+                <a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=44158102000044"
+                   style="display:inline-block;text-decoration:none;height:20px;line-height:20px;">
+                    <img src="../../static/images/beian.png" style="float:left;"/>
+                    粤公网安备 44158102000044号
+                </a>
+            </p>
+        </footer>
+    </div>
+</div>
+<!--/*/<th:block th:replace="admin/_backstageFragments::script">/*/-->
+<script src="../../static/js/jquery-2.1.3.min.js"></script>
+<script src="../../static/js/bootstrap.min.js"></script>
+<script src="../../static/js/bootstrap-select.min.js"></script>
+<script src="../../static/lib/editormd/editormd.min.js"></script>
+<!--/*/</th:block>/*/-->
+<script type="text/javascript" th:inline="javascript">
+    var testEditor;
+    $(function () {
+        testEditor = editormd("test-editor", {
+            placeholder: '本编辑器支持Markdown编辑，左边编写，右边预览',  //默认显示的文字
+            <!--width: "90%",-->
+            height: 500,
+            syncScrolling: "single",
+            emoji: false,
+            // path: "../../static/lib/editormd/lib/",
+            path: "/lib/editormd/lib/",
+            toolbarIcons: function () {  //自定义工具栏
+                return editormd.toolbarModes['simple']; // full, simple, mini
+            },
+        });
+    });
+    <!--var content = encodeURIComponent(testEditor.getMarkdown());-->
+</script>
+<script th:inline="javascript">
+    $('#tags').selectpicker('val', [[${blog.tagIds}]])
+    // 组件取值
+    // 关于组件取值保持原生的jquery方法，比如 var value = $('#sel').val();
+    // 需要注意的是，如果是多选，这里得到的value变量是一个数组变量，形如 ['1','2','3']。
+    // 组件赋值就需要稍微变换一下了，如果你直接 $('#sel').val('1'); 这样赋值将会无效，正确的赋值方法为：
+    // $('.selectpicker').selectpicker('val', '1');
+    // 在一些级联选择的使用场景中，经常需要在赋值的时候顺便触发一下组件的change事件，我们可以这么做。
+    // $('.selectpicker').selectpicker('val', '1').trigger("change");
+    // 如果是多选的赋值，也是一样
+    // $('.selectpicker').selectpicker('val', ['1','2','3']).trigger("change");
+
+    $('#save-btn').click(function () {
+        $('#published').val(false);
+        // $('#blog-form').submit(); // 迂回写法，实现表单提交前的非空验证
+        document.getElementById('sub').click();
+    });
+
+    $('#publish-btn').click(function () {
+        $('#published').val(true);
+        // $('#blog-form').submit();
+        document.getElementById('sub').click();
+    });
+</script>
+
+</body>
+</html>
