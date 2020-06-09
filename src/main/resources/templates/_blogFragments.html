@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
-    <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <link rel="stylesheet" th:href="@{/css/pace.css}">
     <link rel="stylesheet" th:href="@{/css/typo.css}">
     <link rel="stylesheet" th:href="@{/lib/prism/prism.css}">
@@ -49,10 +49,10 @@
                                 <a th:classappend="${name=='archives'}?'active'"
                                    th:href="@{/archives}" href="archives.html" data-hover="归档">归档</a>
                             </li>
-                            <li class="cl-effect-11">
-                                <a th:classappend="${name=='about'}?'active'"
-                                   th:href="@{/about}" href="about.html" data-hover="关于">关于</a>
-                            </li>
+<!--                            <li class="cl-effect-11">-->
+<!--                                <a th:classappend="${name=='about'}?'active'"-->
+<!--                                   th:href="@{/about}" href="about.html" data-hover="关于">关于</a>-->
+<!--                            </li>-->
                         </ul>
                     </div><!-- /.navbar-collapse -->
                 </nav>
@@ -99,7 +99,7 @@
             <li><a href="types.html" th:href="@{/types/-1}">分类</a></li>
             <li><a href="tags.html" th:href="@{/tags/-1}">标签</a></li>
             <li><a href="archives.html" th:href="@{/archives/-1}">归档</a></li>
-            <li><a href="about.html" th:href="@{/about}">关于</a></li>
+<!--            <li><a href="about.html" th:href="@{/about}">关于</a></li>-->
         </ul>
     </nav>
 </div>
